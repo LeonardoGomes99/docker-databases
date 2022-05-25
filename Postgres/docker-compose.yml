@@ -1,0 +1,13 @@
+version: "3.0"
+services:
+  db_postgres:
+    image: postgres
+    container_name: postgres_container
+    environment:
+      POSTGRES_PASSWORD: yjlm!99
+      POSTGRES_USER: leogomes
+      POSTGRES_DB: laravel
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"

@@ -1,0 +1,16 @@
+version: '3.0'
+services:
+  db_mysql:
+    image: mysql
+    container_name: mysql_container
+    restart: unless-stopped
+    tty: true
+    ports: 
+      - "5433:3306"
+    volumes: 
+      - ./mysql:/var/lib/mysql
+    environment: 
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes  
+      MYSQL_DATABASE: database
+      MYSQL_ROOT_PASSWORD:
+    
