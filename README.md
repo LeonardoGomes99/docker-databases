@@ -41,5 +41,5 @@ assim que finalizar a construção voce já pode realizar a conexão ao banco e 
 ```
 
 ```
-caso queira encerrar a execução do DB, rode o comando * docker-compose up -d * dentro da pasta do próprio
+caso queira encerrar a execução do DB, rode o comando * docker-compose down * dentro da pasta do próprio
 ```
