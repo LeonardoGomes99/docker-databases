@@ -4,9 +4,9 @@ services:
     image: postgres
     container_name: postgres_container
     environment:
-      POSTGRES_PASSWORD: yjlm!99
-      POSTGRES_USER: leogomes
-      POSTGRES_DB: laravel
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root
+      POSTGRES_DB: database
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
