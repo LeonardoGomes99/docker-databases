@@ -16,7 +16,7 @@ O projeto ainda está em desenvolvimento e está sujeito a mudanças
   user: root , password: *vazio* , database: database
 
 - postgres (porta 5432) :
-  user: user , password: password , database: database
+  user: root , password: password , database: database
 
 - mongoDB : porta (5434)
 
