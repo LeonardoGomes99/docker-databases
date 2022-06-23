@@ -4,10 +4,10 @@ services:
     image: postgres
     container_name: postgres_container
     environment:
-      POSTGRES_PASSWORD: yjlm!99
-      POSTGRES_USER: leogomes
-      POSTGRES_DB: laravel
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${DATABASE_PORT}:5432"
