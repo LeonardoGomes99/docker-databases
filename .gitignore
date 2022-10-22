@@ -1,5 +1,2 @@
-Postgres/pgdata/
-Postgres-Alpine/pgdata/
-Mysql/mysql/
-MongoDB/mongodb/
-
+data
+.env

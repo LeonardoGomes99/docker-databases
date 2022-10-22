@@ -1,0 +1,42 @@
+version: "3.0"
+
+services:
+
+    db_mongodb:
+        image : mongo
+        container_name: mongodb_container
+        restart: unless-stopped
+        environment:
+            - PUID=1000
+            - PGID=1000
+        ports:
+            - 5434:27017
+        volumes:
+            - ./data/mongodb:/data/db
+
+
+    db_mysql:
+        image: mysql
+        container_name: ${CONTAINER_NAME_MYSQL}
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "${DATABASE_PORT_MYSQL}:3306"
+        volumes:
+            - ${VOLUME_LOCATION_MYSQL}:/var/lib/mysql
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+            MYSQL_DATABASE: ${DATABASE_NAME_MYSQL}
+            MYSQL_ROOT_PASSWORD:
+
+    db_postgres:
+        image: postgres:14-alpine
+        container_name: ${CONTAINER_NAME_POSTGRES}
+        environment:
+            POSTGRES_DB: ${DATABASE_NAME_POSTGRES}
+            POSTGRES_USER: ${DATABASE_USER_POSTGRES}
+            POSTGRES_PASSWORD: ${DATABASE_PASS_POSTGRES}
+        volumes:
+            - ${VOLUME_LOCATION_POSTGRES}:/var/lib/postgresql/data
+        ports:
+            - "${DATABASE_PORT_POSTGRES}:5432"
