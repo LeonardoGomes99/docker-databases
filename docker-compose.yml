@@ -3,7 +3,7 @@ version: "3.0"
 services:
 
     db_mongodb:
-        image : mongo
+        image: mongo
         container_name: mongodb_container
         restart: unless-stopped
         environment:
@@ -13,7 +13,6 @@ services:
             - 5434:27017
         volumes:
             - ./data/mongodb:/data/db
-
 
     db_mysql:
         image: mysql
@@ -29,6 +28,7 @@ services:
             MYSQL_DATABASE: ${DATABASE_NAME_MYSQL}
             MYSQL_ROOT_PASSWORD:
 
+
     db_postgres:
         image: postgres:14-alpine
         container_name: ${CONTAINER_NAME_POSTGRES}
@@ -40,3 +40,15 @@ services:
             - ${VOLUME_LOCATION_POSTGRES}:/var/lib/postgresql/data
         ports:
             - "${DATABASE_PORT_POSTGRES}:5432"
+
+    db_sql-server:
+        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        container_name: ${CONTAINER_NAME_SQLSERVER}
+        environment:
+            ACCEPT_EULA: "Y"
+            SA_PASSWORD: ${DATABASE_PASS_SQLSERVER}
+            MSSQL_PID: ${DATABASE_PID_SQLSERVER} 
+        ports:
+        - "${DATABASE_PORT_SQLSERVER}:1433"
+        volumes:
+        - ./data/sqlserver:/var/opt/mssql/data
