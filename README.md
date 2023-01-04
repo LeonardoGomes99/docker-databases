@@ -22,24 +22,4 @@ O projeto ainda está em desenvolvimento e está sujeito a mudanças
 
 ## 🚀 Usando docker-database
 
-Para usar esse projeto, siga estas etapas:
 
-```
-após clonar o repositório entre em qual DB voce deseja usar
-```
-
-```
-após entrar na pasta do DB que escolheu, irá encontrar o arquivo *docker-compose.yml*
-```
-
-```
-abra o terminal na pasta e rode o comando * docker-compose up -d * para começar a construir o seu container
-```
-
-```
-assim que finalizar a construção voce já pode realizar a conexão ao banco e utilizar
-```
-
-```
-caso queira encerrar a execução do DB, rode o comando * docker-compose down * dentro da pasta do próprio
-```
