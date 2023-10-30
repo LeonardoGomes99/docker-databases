@@ -1,4 +1,4 @@
-version: "3.0"
+version: "3.9"
 
 services:
 
@@ -39,6 +39,26 @@ services:
             - ${VOLUME_LOCATION_POSTGRES}:/var/lib/postgresql/data
         ports:
             - "${DATABASE_PORT_POSTGRES}:5432"
+        networks:
+            - postgres_network
+
+    pg_admin:
+        image: dpage/pgadmin4:latest
+        restart: unless-stopped
+        container_name: ${CONTAINER_NAME_PGADMIN}
+        ports:
+            - "${PORT_PGADMIN}:80"
+        volumes:
+            - ${VOLUME_LOCATION_PGADMIN}:/var/lib/pgadmin
+        environment:
+            PGADMIN_DEFAULT_EMAIL: ${DEFAULT_EMAIL_PGADMIN}
+            PGADMIN_DEFAULT_PASSWORD: ${DEFAULT_PASS_PGADMIN}
+        depends_on:
+            - db_postgres
+        links:
+            - db_postgres
+        networks:
+            - postgres_network
 
     db_sql-server:
         image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
@@ -51,14 +71,7 @@ services:
             - "${DATABASE_PORT_SQLSERVER}:1433"
         volumes:
             - ${VOLUME_LOCATION_SQLSERVER}:/var/opt/mssql/data
-
-    pg_admin_container:
-        image: dpage/pgadmin4:latest
-        container_name: ${CONTAINER_NAME_PGADMIN}
-        ports:
-            - "${PORT_PGADMIN}:80"
-        volumes:
-            - ${VOLUME_LOCATION_PGADMIN}:/var/lib/pgadmin
-        environment:
-            PGADMIN_DEFAULT_EMAIL: ${DEFAULT_EMAIL_PGADMIN}
-            PGADMIN_DEFAULT_PASSWORD: ${DEFAULT_PASS_PGADMIN}
+            
+networks:
+  postgres_network:
+    driver: bridge
