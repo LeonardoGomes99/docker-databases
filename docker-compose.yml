@@ -4,15 +4,15 @@ services:
 
     db_mongodb:
         image: mongo
-        container_name: mongodb_container
+        container_name: ${CONTAINER_NAME_MONGODB}
         restart: unless-stopped
         environment:
             - PUID=1000
             - PGID=1000
         ports:
-            - 5434:27017
+            - ${PORT_MONGODB}:27017
         volumes:
-            - ./data/mongodb:/data/db
+            - ${VOLUME_LOCATION_MONGODB}:/data/db
 
     db_mysql:
         image: mysql
@@ -26,11 +26,10 @@ services:
         environment:
             MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
             MYSQL_DATABASE: ${DATABASE_NAME_MYSQL}
-            MYSQL_ROOT_PASSWORD:
-
+            MYSQL_ROOT_PASSWORD: ${DATABASE_PASS_MYSQL}
 
     db_postgres:
-        image: postgres:14-alpine
+        image: postgres:16.0-alpine
         container_name: ${CONTAINER_NAME_POSTGRES}
         environment:
             POSTGRES_DB: ${DATABASE_NAME_POSTGRES}
@@ -47,8 +46,19 @@ services:
         environment:
             ACCEPT_EULA: "Y"
             SA_PASSWORD: ${DATABASE_PASS_SQLSERVER}
-            MSSQL_PID: ${DATABASE_PID_SQLSERVER} 
+            MSSQL_PID: ${DATABASE_PID_SQLSERVER}
         ports:
-        - "${DATABASE_PORT_SQLSERVER}:1433"
+            - "${DATABASE_PORT_SQLSERVER}:1433"
         volumes:
-        - ./data/sqlserver:/var/opt/mssql/data
+            - ${VOLUME_LOCATION_SQLSERVER}:/var/opt/mssql/data
+
+    pg_admin_container:
+        image: dpage/pgadmin4:latest
+        container_name: ${CONTAINER_NAME_PGADMIN}
+        ports:
+            - "${PORT_PGADMIN}:80"
+        volumes:
+            - ${VOLUME_LOCATION_PGADMIN}:/var/lib/pgadmin
+        environment:
+            PGADMIN_DEFAULT_EMAIL: ${DEFAULT_EMAIL_PGADMIN}
+            PGADMIN_DEFAULT_PASSWORD: ${DEFAULT_PASS_PGADMIN}
