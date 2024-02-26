@@ -42,6 +42,48 @@ services:
         networks:
             - postgres_network
 
+    db_sql-server:
+        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        container_name: ${CONTAINER_NAME_SQLSERVER}
+        environment:
+            ACCEPT_EULA: "Y"
+            SA_PASSWORD: ${DATABASE_PASS_SQLSERVER}
+            MSSQL_PID: ${DATABASE_PID_SQLSERVER}
+        ports:
+            - "${DATABASE_PORT_SQLSERVER}:1433"
+        volumes:
+            - ${VOLUME_LOCATION_SQLSERVER}:/var/opt/mssql/data
+
+    db_mariadb:
+        container_name: ${CONTAINER_NAME_MARIADB}
+        image: mariadb:latest
+        ports:
+            - "${DATABASE_PORT_MARIADB}:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=${DATABASE_PASS_MARIADB}
+        volumes:
+            - ${VOLUME_LOCATION_MARIADB}:/var/lib/mysql
+
+    # db_oracle:
+    #     container_name: ${CONTAINER_NAME_ORACLE}
+    #     image: Imagem será criada do zero
+    #     environment:
+    #         - ORACLE_SID=orcl
+    #         - ORACLE_PDB=orcl
+    #         - ORACLE_PWD=${DATABASE_PASS_ORACLE}
+    #     ports:
+    #         - "${DATABASE_PORT_ORACLE}:1521"
+    #     volumes:
+    #         - ${VOLUME_LOCATION_ORACLE}:/opt/oracle/oradata
+
+    # sqlite:
+    #     container_name: ${CONTAINER_NAME_SQLITE}
+    #     image: Imagem será criada do zero
+    #     environment:
+    #         - DB_NAME=${DATABASE_NAME_SQLITE}.db  # Set the database name environment variable
+    #     volumes:
+    #         - ${VOLUME_LOCATION_SQLITE}:/var/lib/sqlite
+
     pg_admin:
         image: dpage/pgadmin4:latest
         restart: unless-stopped
@@ -59,18 +101,6 @@ services:
             - db_postgres
         networks:
             - postgres_network
-
-    db_sql-server:
-        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
-        container_name: ${CONTAINER_NAME_SQLSERVER}
-        environment:
-            ACCEPT_EULA: "Y"
-            SA_PASSWORD: ${DATABASE_PASS_SQLSERVER}
-            MSSQL_PID: ${DATABASE_PID_SQLSERVER}
-        ports:
-            - "${DATABASE_PORT_SQLSERVER}:1433"
-        volumes:
-            - ${VOLUME_LOCATION_SQLSERVER}:/var/opt/mssql/data
             
 networks:
   postgres_network:
