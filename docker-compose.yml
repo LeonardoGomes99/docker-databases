@@ -13,6 +13,8 @@ services:
             - ${PORT_MONGODB}:27017
         volumes:
             - ${VOLUME_LOCATION_MONGODB}:/data/db
+        networks:
+            - databases_network
 
     db_mysql:
         image: mysql
@@ -27,6 +29,8 @@ services:
             MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
             MYSQL_DATABASE: ${DATABASE_NAME_MYSQL}
             MYSQL_ROOT_PASSWORD: ${DATABASE_PASS_MYSQL}
+        networks:
+            - databases_network
 
     db_postgres:
         image: postgres:16.0-alpine
@@ -40,7 +44,7 @@ services:
         ports:
             - "${DATABASE_PORT_POSTGRES}:5432"
         networks:
-            - postgres_network
+            - databases_network
 
     db_sql-server:
         image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
@@ -53,6 +57,8 @@ services:
             - "${DATABASE_PORT_SQLSERVER}:1433"
         volumes:
             - ${VOLUME_LOCATION_SQLSERVER}:/var/opt/mssql/data
+        networks:
+            - databases_network
 
     db_mariadb:
         container_name: ${CONTAINER_NAME_MARIADB}
@@ -63,26 +69,8 @@ services:
             - MYSQL_ROOT_PASSWORD=${DATABASE_PASS_MARIADB}
         volumes:
             - ${VOLUME_LOCATION_MARIADB}:/var/lib/mysql
-
-    # db_oracle:
-    #     container_name: ${CONTAINER_NAME_ORACLE}
-    #     image: Imagem será criada do zero
-    #     environment:
-    #         - ORACLE_SID=orcl
-    #         - ORACLE_PDB=orcl
-    #         - ORACLE_PWD=${DATABASE_PASS_ORACLE}
-    #     ports:
-    #         - "${DATABASE_PORT_ORACLE}:1521"
-    #     volumes:
-    #         - ${VOLUME_LOCATION_ORACLE}:/opt/oracle/oradata
-
-    # sqlite:
-    #     container_name: ${CONTAINER_NAME_SQLITE}
-    #     image: Imagem será criada do zero
-    #     environment:
-    #         - DB_NAME=${DATABASE_NAME_SQLITE}.db  # Set the database name environment variable
-    #     volumes:
-    #         - ${VOLUME_LOCATION_SQLITE}:/var/lib/sqlite
+        networks:
+            - databases_network
 
     pg_admin:
         image: dpage/pgadmin4:latest
@@ -97,11 +85,20 @@ services:
             PGADMIN_DEFAULT_PASSWORD: ${DEFAULT_PASS_PGADMIN}
         depends_on:
             - db_postgres
-        links:
-            - db_postgres
         networks:
-            - postgres_network
+            - databases_network
+
+    db_gate:
+        image: dbgate/dbgate
+        container_name: ${CONTAINER_NAME_DBGATE}
+        restart: always
+        ports:
+            - ${PORT_DBGATE}:3000
+        volumes:
+            - ${VOLUME_LOCATION_DBGATE}:/root/.dbgate
+        networks:
+            - databases_network
             
 networks:
-  postgres_network:
+  databases_network:
     driver: bridge
